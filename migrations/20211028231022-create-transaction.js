@@ -20,7 +20,7 @@ module.exports = {
       attachment: {
         type: Sequelize.STRING
       },
-      trip: {
+      tripId: {
         type: Sequelize.INTEGER,
         references: {
           model: "trips",
@@ -29,7 +29,7 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      user: {
+      userId: {
         type: Sequelize.INTEGER,
         references: {
           model: "users",
