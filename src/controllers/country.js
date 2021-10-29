@@ -47,7 +47,7 @@ exports.addCountry = async (req, res) => {
         await country.create(req.body)
         res.send({
             status: "success",
-            message: "Add user finished"
+            message: "Add country finished"
         })
     } catch (error) {
         console.log(error)
