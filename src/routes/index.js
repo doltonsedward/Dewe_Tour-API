@@ -17,8 +17,8 @@ router.post('/country', addCountry)
 router.patch('/country/:id', updateCountry)
 router.delete('/country/:id', deleteCountry)
 
-// router.get('/trips', getTrips)
-// router.post('/trip', addTrip)
+router.get('/trips', getTrips)
+router.post('/trip', addTrip)
 
 // router.get('/transaction', getTransactions)
 // router.post('/transaction', addTransaction)
