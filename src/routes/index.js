@@ -1,11 +1,12 @@
 const express = require('express')
 // const { getCountrys, addCountry, getCountry, updateCountry, deleteCountry } = require('../controllers/country')
 // const { addTransaction, getTransactions } = require('../controllers/transaction')
-const { addUsers } = require('../controllers/user')
+const { getUsers, addUsers, deleteUsers } = require('../controllers/user')
 
 const router = express.Router()
 
-// router.get('/users', getUsers)
+router.get('/users', getUsers)
+router.delete('/user/:id', deleteUsers)
 
 router.post('/register', addUsers)
 
