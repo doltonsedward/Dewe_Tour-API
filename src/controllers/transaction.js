@@ -1,4 +1,4 @@
-const { transaction } = require('../../models')
+const { transaction, trip } = require('../../models')
 
 exports.addTransaction = async (req, res) => {
     try {
@@ -8,6 +8,7 @@ exports.addTransaction = async (req, res) => {
             status: "success",
             message: "Add transaction finished"
         })
+
     } catch (error) {
         console.log(error)
         res.status(500).send({
@@ -19,12 +20,25 @@ exports.addTransaction = async (req, res) => {
 
 exports.getTransactions = async (req, res) => {
     try {
-        const transactions = await transaction.findAll()
+        const transactions = await transaction.findAll({
+            include: [
+                {
+                    model: trip,
+                    attributes: {
+                        exclude: ["createdAt", "updatedAt"]
+                    }
+                }
+            ],
+            attributes: {
+                exclude: ["createdAt", "updatedAt"]
+            }
+        })
         
         res.send({
             status: "success",
             transactions
         })
+        
     } catch (error) {
         console.log(error)
         res.status(500).send({
