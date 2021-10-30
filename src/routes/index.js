@@ -8,7 +8,8 @@ const { register, login } = require('../controllers/auth')
 
 const router = express.Router()
 
-router.get('/users', getUsers)
+router.get('/users', auth, getUsers)
+router.get('/user/:id', getUsers)
 router.delete('/user/:id', deleteUser)
 router.patch('/user/:id', updateUser)
 
