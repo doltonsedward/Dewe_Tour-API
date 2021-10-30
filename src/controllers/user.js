@@ -17,14 +17,20 @@ exports.getUsers = async (req, res) => {
     }
 }
 
-exports.addUsers = async (req, res) => {
+exports.getUser = async (req, res) => {
     try {
-        await user.create(req.body)
+        const { id } = req.params
+        const users = await user.findOne({
+            where: {
+                id
+            }
+        })
 
         res.send({
-            status: "success",
-            message: "Add user finished"
+            sttus: "success",
+            users
         })
+        
     } catch (error) {
         console.log(error)
         res.send({
@@ -32,7 +38,7 @@ exports.addUsers = async (req, res) => {
             message: "Server Error"
         })
     }
-} 
+}
 
 exports.deleteUser = async (req, res) => {
     try {
