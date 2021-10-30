@@ -21,6 +21,16 @@ exports.register = async (req, res) => {
         })
     }
 
+    const allUser = await user.findAll()
+    allUser.map(item => {
+        if (req.body.fullName === item.fullName) {
+            return res.status(400).send({
+                status: "failed",
+                message: "Full Name already exist"
+            })
+        } 
+    })
+
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         

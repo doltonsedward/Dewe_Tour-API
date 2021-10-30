@@ -43,8 +43,19 @@ exports.getCountry = async (req, res) => {
 }
 
 exports.addCountry = async (req, res) => {
+    const allCountry = await country.findAll()
+    allCountry.map(item => {
+        if (req.body.name === item.name) {
+            res.status(400).send({
+                status: "failed",
+                message: "Country name already exist"
+            })
+        }
+    })
+    
     try {
         const data = await country.create(req.body)
+
         res.send({
             status: "success",
             message: "Add country finished",
