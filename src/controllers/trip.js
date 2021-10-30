@@ -4,17 +4,14 @@ exports.getTrips = async (req, res) => {
     try {
         const trips = await trip.findAll({
             include: [
-                {
-                    model: country,
-                    attributes: {
-                        exclude: ["createdAt", "updatedAt"]
-                    }
+              {
+                model: country,
+                attributes: {
+                  exclude: ["createdAt", "updatedAt"],
                 },
+              },
             ],
-            attributes: {
-                exclude: ["createdAt", "updatedAt"]
-            }
-        })
+          });
 
         res.send({
             status: "success",
@@ -22,8 +19,9 @@ exports.getTrips = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
+        console.log('error di trip')
 
-        res.send({
+        res.status(400).send({
             status: "failed",
             message: "Server error"
         })

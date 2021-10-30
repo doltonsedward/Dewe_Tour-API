@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      trip.hasMany(models.country, {
+      trip.belongsTo(models.country, {
         foreignKey: {
           name: "countryId"
         },
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   
   trip.init({
     title: DataTypes.STRING,
-    country: DataTypes.INTEGER,
+    countryId: DataTypes.INTEGER,
     accomodation: DataTypes.STRING,
     transportation: DataTypes.STRING,
     eat: DataTypes.STRING,

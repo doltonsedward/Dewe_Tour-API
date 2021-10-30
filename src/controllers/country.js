@@ -44,10 +44,11 @@ exports.getCountry = async (req, res) => {
 
 exports.addCountry = async (req, res) => {
     try {
-        await country.create(req.body)
+        const data = await country.create(req.body)
         res.send({
             status: "success",
-            message: "Add country finished"
+            message: "Add country finished",
+            data
         })
     } catch (error) {
         console.log(error)

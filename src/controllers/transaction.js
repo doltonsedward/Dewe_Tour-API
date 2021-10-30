@@ -27,7 +27,7 @@ exports.getTransactions = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
-        res.status.send({
+        res.status(500).send({
             status: "failed",
             message: "Server error"
         })
