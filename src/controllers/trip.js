@@ -15,17 +15,21 @@ exports.getTrips = async (req, res) => {
             ]
           });
 
-        const dataImage = []
+        let dataImage = []
 
-        
         res.send({
             status: "success",
             data: data.map((item) => {
                 const itemValue = JSON.parse(item.dataValues.image)
+
+                const newData = []
                 for (let i = 0; i < itemValue.length; i++) {
-                    dataImage.push(`${process.env.PATH_TRIPS}${itemValue[i]}`)
+                    newData.push(`${process.env.PATH_TRIPS}${itemValue[i]}`)
                 }
 
+                dataImage = newData
+
+                // change default image in data to new link image
                 item.dataValues.image = dataImage
                 return item
             })
