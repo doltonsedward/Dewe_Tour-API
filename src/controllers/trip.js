@@ -31,6 +31,7 @@ exports.getTrips = async (req, res) => {
                 for (let i = 0; i < itemValue.length; i++) {
                     dataImage.push(`${process.env.PATH_TRIPS}${itemValue[i]}`)
                 }
+                
                 item.dataValues.image = dataImage
                 return item
             })
