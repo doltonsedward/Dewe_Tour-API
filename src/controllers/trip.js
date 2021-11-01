@@ -15,12 +15,6 @@ exports.getTrips = async (req, res) => {
             ]
           });
 
-        const totalImage = []
-        const image = JSON.parse(data[0].dataValues.image)
-        for (let item of image) {
-            totalImage.push(item)
-        }
-
         const dataImage = []
 
         
@@ -31,14 +25,11 @@ exports.getTrips = async (req, res) => {
                 for (let i = 0; i < itemValue.length; i++) {
                     dataImage.push(`${process.env.PATH_TRIPS}${itemValue[i]}`)
                 }
-                
+
                 item.dataValues.image = dataImage
                 return item
             })
         })
-
-        console.log(dataImage)
-
     } catch (error) {
         console.log(error)
 
