@@ -33,12 +33,13 @@ exports.getUser = async (req, res) => {
             })
         }
 
-        // check if token id equals or not with id params
+        
         if (req.user.role === 'admin') {
             return res.send({
                 status: "success",
                 data
             })
+        // check if token id equals or not with id params
         } else if (req.user.id !== parseInt(id)) { // req.user from auth
             return res.status(400).send({
                 status: "failed",

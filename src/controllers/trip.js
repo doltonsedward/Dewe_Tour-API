@@ -12,13 +12,32 @@ exports.getTrips = async (req, res) => {
                   exclude: ["createdAt", "updatedAt"],
                 },
               },
-            ],
+            ]
           });
 
+        const totalImage = []
+        const image = JSON.parse(data[0].dataValues.image)
+        for (let item of image) {
+            totalImage.push(item)
+        }
+
+        const dataImage = []
+
+        
         res.send({
             status: "success",
-            data
+            data: data.map((item) => {
+                const itemValue = JSON.parse(item.dataValues.image)
+                for (let i = 0; i < itemValue.length; i++) {
+                    dataImage.push(`${process.env.PATH_TRIPS}${itemValue[i]}`)
+                }
+                item.dataValues.image = dataImage
+                return item
+            })
         })
+
+        console.log(dataImage)
+
     } catch (error) {
         console.log(error)
 
@@ -105,7 +124,7 @@ exports.deleteTrip = async (req, res) => {
 
         for (let item of imgStringToArray) {
             console.log(item)
-            fs.unlinkSync(path.join(__dirname, '../../uploads/proof/' + item)) 
+            fs.unlinkSync(path.join(__dirname, '../../uploads/trips/' + item)) 
         }
 
         await trip.destroy({

@@ -7,16 +7,9 @@ exports.addTransaction = async (req, res) => {
         const { ...data } = req.body
         const { attachment } = req.files
 
-        const allImage = []
-        for (let item of attachment) {
-            allImage.push(item.filename)
-        }
-
-        const imageFileToString = JSON.stringify(allImage)
-
         await transaction.create({
             ...data,
-            attachment: imageFileToString
+            attachment: attachment[0].filename
         })
 
         res.send({
@@ -39,20 +32,18 @@ exports.updateTransaction = async (req, res) => {
 
         const { attachment } = req.files
 
-        const allImage = []
-        for (let item of attachment) {
-            allImage.push(item.filename)
-        }
-
-        const imageFileToString = JSON.stringify(allImage)
-
         await transaction.update({
             ...req.body,
-            attachment: imageFileToString
+            attachment: attachment[0].filename
         }, {
             where: {
                 id
             }
+        })
+
+        res.send({
+            status: "success",
+            message: `Update id: ${id} finished`
         })
         
     } catch (error) {
@@ -63,19 +54,15 @@ exports.updateTransaction = async (req, res) => {
 exports.deleteTransaction = async (req, res) => {
     try {
         const { id } = req.params
+        const { attachment } = req.files
 
-        const data = await transaction.findOne({
+        await transaction.findOne({
             where: {
                 id
             }
         })
 
-        const image = data.attachment
-        const imgStringToArray = JSON.parse(image)
-
-        for (let item of imgStringToArray) {
-            fs.unlinkSync(path.join(__dirname, '../../uploads/proof/' + item)) 
-        }
+        fs.unlink(path.join(__dirname, '../../uploads/proof/' + attachment[0].filename)) 
 
         await transaction.destroy({
             where: {
