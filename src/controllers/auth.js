@@ -3,14 +3,16 @@ const { user } = require('../../models')
 const Joi = require('joi')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const avatarDefault = require('../utils/avatar')
 
+// register section
 exports.register = async (req, res) => {
     const schema = Joi.object({
         fullName: Joi.string().min(5).required(),
         email: Joi.string().email().min(6).required(),
         password: Joi.string().min(6).required(),
-        phone: Joi.string().min(5),
-        address: Joi.string().min(5)
+        phone: Joi.string().min(8),
+        address: Joi.string().min(6)
     })
 
     const { error } = schema.validate(req.body)
@@ -21,36 +23,45 @@ exports.register = async (req, res) => {
         })
     }
 
-    const allUser = await user.findAll()
-    allUser.map(item => {
-        if (req.body.fullName === item.fullName) {
+    
+    try {
+        const allUser = await user.findAll()
+        const nameExist = allUser.find(item => req.body.fullName === item.fullName)
+        const emailExist = allUser.find(item => req.body.email === item.email)
+
+        if (nameExist) {
             return res.status(400).send({
                 status: "failed",
                 message: "Full Name already exist"
             })
-        } 
-    })
+        } else if (emailExist) {
+            return res.status(400).send({
+                status: "failed",
+                message: "Email already exist"
+            })
+        }
 
-    try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         
         const { fullName, email, phone, address } = req.body
+
+        const randomAvatar = Math.floor(Math.random() * (avatarDefault.length))
+
         const newUser = await user.create({
             fullName,
             email,
             password: hashedPassword,
             phone,
-            address
+            address,
+            role: 'user',
+            avatar: process.env.PATH_AVATAR + avatarDefault[randomAvatar]
         })
-
-        const token = jwt.sign({ id: user.id }, process.env.TOKEN_KEY)
 
         res.status(200).send({
             status: "success",
             data: {
-                email: newUser.email,
-                password: newUser.password,
-                token
+                fullName: newUser.fullName,
+                email: newUser.email
             }
         })
     } catch (error) {
@@ -62,6 +73,8 @@ exports.register = async (req, res) => {
     }
 }
 
+
+// login section
 exports.login = async (req, res) => {
     const schema = Joi.object({
         email: Joi.string().email().min(6).required(),
@@ -95,7 +108,8 @@ exports.login = async (req, res) => {
             })
         }
 
-        const token = jwt.sign({ id: userExist.id }, process.env.TOKEN_KEY)
+        // create jwt token, and add id, role to token. expiresIn for expires date of token
+        const token = jwt.sign({ id: userExist.id, role: userExist.role }, process.env.TOKEN_KEY, { expiresIn: '1d' }) 
         res.status(200).send({
             status: "success",
             data: {

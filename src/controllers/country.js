@@ -2,13 +2,13 @@ const { country } = require('../../models')
 
 exports.getCountrys = async (req, res) => {
     try {
-        const countrys = await country.findAll({
+        const data = await country.findAll({
             attributes: ["id", "name"]
         })
 
         res.send({
             status: "success",
-            countrys
+            data
         })
     } catch (error) {
         console.log(error)
@@ -43,18 +43,19 @@ exports.getCountry = async (req, res) => {
 }
 
 exports.addCountry = async (req, res) => {
-    const allCountry = await country.findAll()
-    allCountry.map(item => {
-        if (req.body.name === item.name) {
-            res.status(400).send({
+    try {
+        const allCountry = await country.findAll()
+        const isAlreadyExist = allCountry.find(item => req.body.name === item.name)
+
+        if (isAlreadyExist) {
+            return res.status(400).send({
                 status: "failed",
                 message: "Country name already exist"
             })
         }
-    })
-    
-    try {
+
         const data = await country.create(req.body)
+
 
         res.send({
             status: "success",
@@ -101,6 +102,20 @@ exports.updateCountry = async (req, res) => {
 exports.deleteCountry = async (req, res) => {
     try {
         const { id } = req.params
+
+        const allCountry = await country.findOne({ 
+            where: {
+                id
+            } 
+        })
+
+        if (!allCountry) {
+            return res.status(500).send({
+                status: "failed",
+                message: "Data not found"
+            })
+        }
+        
         await country.destroy({
             where: {
                 id

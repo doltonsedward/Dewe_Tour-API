@@ -2,11 +2,11 @@ const { user } = require('../../models')
 
 exports.getUsers = async (req, res) => {
     try {
-        const users = await user.findAll()
+        const data = await user.findAll()
         
         res.send({
             status: "success",
-            users
+            data
         })
     } catch (error) {
         console.log(error)
@@ -20,17 +20,37 @@ exports.getUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
     try {
         const { id } = req.params
-        const users = await user.findOne({
+        const data = await user.findOne({
             where: {
                 id
             }
         })
 
-        res.send({
-            sttus: "success",
-            users
-        })
+        if (!data) {
+            return res.status(404).send({
+                status: "failed",
+                message: "User not found"
+            })
+        }
+
+        // check if token id equals or not with id params
+        if (req.user.role === 'admin') {
+            return res.send({
+                status: "success",
+                data
+            })
+        } else if (req.user.id !== parseInt(id)) { // req.user from auth
+            return res.status(400).send({
+                status: "failed",
+                message: "Access Denied!"
+            })
+        }
+
         
+        res.send({
+            status: "success",
+            data
+        })
     } catch (error) {
         console.log(error)
         res.send({
@@ -65,7 +85,7 @@ exports.deleteUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
     try {
         const { id } = req.params
-        await user.update(req.body, {
+        await user.update({...req.body}, {
             where: {
                 id
             }
