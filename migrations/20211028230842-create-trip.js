@@ -41,6 +41,9 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
+      type: {
+        type: Sequelize.STRING
+      },
       quota: {
         type: Sequelize.INTEGER
       },
