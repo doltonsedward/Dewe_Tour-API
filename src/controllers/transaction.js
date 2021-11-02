@@ -1,15 +1,14 @@
 const fs = require('fs')
 const path = require('path')
+const jwt_decode = require('jwt-decode')
 const { transaction, trip, user } = require('../../models')
 
 exports.addTransaction = async (req, res) => {
     try {
         const { ...data } = req.body
-        const { attachment } = req.files
 
         await transaction.create({
-            ...data,
-            attachment: attachment[0].filename
+            ...data
         })
 
         res.send({
@@ -29,8 +28,40 @@ exports.addTransaction = async (req, res) => {
 exports.updateTransaction = async (req, res) => {
     try {
         const { id } = req.params
-
         const { attachment } = req.files
+
+        const authHeader = req.header('Authorization')
+        const token = authHeader && authHeader.split(' ')[1]
+        const tokenDecode = jwt_decode(token) // decoded token
+
+        const userInfo = await transaction.findOne({
+            where: {
+                id
+            }
+        })
+
+        console.log(userInfo.userId)
+
+        if (tokenDecode.role === 'admin') {
+            await transaction.update({
+                ...req.body,
+                attachment: attachment[0].filename
+            }, {
+                where: {
+                    id
+                }
+            })
+    
+            return res.send({
+                status: "success",
+                message: `Update id: ${id} finished`
+            })
+        } else if (userInfo.userId !== tokenDecode.id) {
+            return res.status(400).send({
+                status: "failed",
+                message: "You dont have access for this transaction"
+            })
+        } 
 
         await transaction.update({
             ...req.body,
@@ -47,22 +78,27 @@ exports.updateTransaction = async (req, res) => {
         })
         
     } catch (error) {
-        
+        console.log(error)
+        res.status(500).send({
+            status: "failed",
+            message: "Server error"
+        })
     }
 }
 
 exports.deleteTransaction = async (req, res) => {
     try {
         const { id } = req.params
-        const { attachment } = req.files
 
-        await transaction.findOne({
+        const data = await transaction.findOne({ 
             where: {
                 id
-            }
+            } 
         })
 
-        fs.unlink(path.join(__dirname, '../../uploads/proof/' + attachment[0].filename)) 
+        const image = data.attachment
+
+        image ? fs.unlinkSync(path.join(__dirname, '../../uploads/proof/' + image)) : ''
 
         await transaction.destroy({
             where: {
