@@ -104,6 +104,38 @@ exports.addTrip = async (req, res) => {
     }
 }
 
+exports.updateTrip = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { image } = req.files
+
+        const dataImage = []
+
+        image.map(item => {
+            dataImage.push(item.filename)
+        })
+
+        await trip.update({
+            image:  JSON.stringify(dataImage)
+        }, {
+            where: {
+                id
+            }
+        })
+
+        res.send({
+            status: "success",
+            message: `Update id: ${id} finished`
+        })
+        
+    } catch (error) {
+        res.status(500).send({
+            status: "failed",
+            message: "Server error"
+        })
+    }
+}
+
 exports.deleteTrip = async (req, res) => {
     try {
         const { id } = req.params
@@ -114,14 +146,14 @@ exports.deleteTrip = async (req, res) => {
         })
 
         const image = data.image
-        const imgStringToArray = JSON.parse(image)
 
-        console.log(imgStringToArray)
-
-        for (let item of imgStringToArray) {
-            console.log(item)
-            fs.unlinkSync(path.join(__dirname, '../../uploads/trips/' + item)) 
-        }
+        fs.readdir('./uploads/trips', (err, files) => {
+            files.map((item) => {
+                if (image.indexOf(item) !== -1) {
+                    fs.unlinkSync(path.join(__dirname, '../../uploads/trips/' + item))
+                }
+            })
+        })
 
         await trip.destroy({
             where: {
