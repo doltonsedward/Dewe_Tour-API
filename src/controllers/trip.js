@@ -20,7 +20,7 @@ exports.getTrips = async (req, res) => {
         res.send({
             status: "success",
             data: data.map((item) => {
-                const itemValue = JSON.parse(item.dataValues.image)
+                const itemValue = JSON.parse(item.image)
 
                 const newData = []
                 for (let i = 0; i < itemValue.length; i++) {
@@ -30,7 +30,7 @@ exports.getTrips = async (req, res) => {
                 dataImage = newData
 
                 // change default image in data to new link image
-                item.dataValues.image = dataImage
+                item.image = dataImage
                 return item
             })
         })
@@ -50,12 +50,42 @@ exports.detailTrip = async (req, res) => {
         const data = await trip.findOne({
             where: {
                 id
-            }
+            },
+            include: [
+                {
+                    model: country,
+                    attributes: {
+                    exclude: ["createdAt", "updatedAt"],
+                    },
+                },
+            ]
         })
+
+        const { accomodation, countryId, dateTrip, day, description, eat, image, night, price, quota, title, transportation, type } = data
+
+        const dataImage = JSON.parse(image)
+        const newDataImage = []
+        for (let i = 0; i < dataImage.length; i++) {
+            newDataImage.push(`${process.env.PATH_TRIPS}${dataImage[i]}`)
+        }
 
         res.send({
             status: "success",
-            data
+            data: { 
+                accomodation, 
+                countryId, 
+                dateTrip,  
+                day,
+                description,
+                eat,
+                image: newDataImage,
+                night,
+                price,
+                quota,
+                title,
+                transportation,
+                type
+            }
         })
     } catch (error) {
         res.status(500).send({
