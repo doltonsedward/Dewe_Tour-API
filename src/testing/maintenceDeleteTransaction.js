@@ -1,29 +1,29 @@
 const fs = require('fs')
 const path = require('path')
-const { trip } = require('../../models')
+const { transaction } = require('../../models')
 
-exports.maintenceDeleteTrips = async (req, res) => {
+exports.maintenceDeleteTransaction = async (req, res) => {
     try {
-        const allTrips = await trip.findAll()
+        const allTransaction = await transaction.findAll()
 
         let totalImageTrips = '' // initialize container of array string
 
-        allTrips.map(item => {
-            console.log(item.image)
-            totalImageTrips += item.image
+        allTransaction.map(item => {
+            console.log(item.attachment)
+            totalImageTrips += item.attachment
         })
 
-        fs.readdir('./uploads/trips', (err, files) => {
+        fs.readdir('./uploads/proof', (err, files) => {
             files.map((item) => {
                 if (totalImageTrips.indexOf(item) === -1) { // check if file doesnt exist in database
-                    fs.unlinkSync(path.join(__dirname, '../../uploads/trips/' + item))
+                    fs.unlinkSync(path.join(__dirname, '../../uploads/proof/' + item))
                 }
             })
         })
         
         res.send({
             status: "success",
-            message: "Trip clen right now"
+            message: "Transaction clean right now"
         })
     } catch (error) {
         console.log(error)
