@@ -84,7 +84,8 @@ exports.detailTrip = async (req, res) => {
                 quota,
                 title,
                 transportation,
-                type
+                type,
+                country: data.country
             }
         })
     } catch (error) {
