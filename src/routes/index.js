@@ -13,7 +13,7 @@ const { maintenceDeleteTransaction } = require('../testing/maintenceDeleteTransa
 const router = express.Router() 
 
 router.get('/users', auth, checkAdmin, getUsers) 
-router.get('/user/:id', auth, getUser) 
+router.get('/user', auth, getUser) 
 router.delete('/user/:id', auth, checkAdmin, deleteUser) 
 router.patch('/user/:id', updateUser) 
 

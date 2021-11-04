@@ -19,12 +19,16 @@ exports.getUsers = async (req, res) => {
 
 exports.getUser = async (req, res) => {
     try {
-        const { id } = req.params
+        const idUser = req.user.id
+        const id = idUser
+
         const data = await user.findOne({
             where: {
                 id
             }
         })
+
+        console.log(idUser)
 
         if (!data) {
             return res.status(404).send({
@@ -32,7 +36,6 @@ exports.getUser = async (req, res) => {
                 message: "User not found"
             })
         }
-
         
         if (req.user.role === 'admin') {
             return res.send({
