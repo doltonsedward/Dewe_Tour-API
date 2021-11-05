@@ -4,7 +4,7 @@ const { getTrips, addTrip, detailTrip, deleteTrip, updateTrip } = require('../co
 const { addTransaction, getTransactions, deleteTransaction, updateTransaction } = require('../controllers/transaction') 
 const { getUsers, deleteUser, updateUser, getUser } = require('../controllers/user') 
 const { auth } = require('../middlewares/auth') 
-const { register, login } = require('../controllers/auth') 
+const { register, login, checkAuth } = require('../controllers/auth') 
 const { checkAdmin } = require('../middlewares/checkAdmin')  
 const { uploadFile } = require('../middlewares/uploadFIle')  
 const { maintenceDeleteTrips } = require('../testing/maintenceDeleteTrips')
@@ -17,6 +17,7 @@ router.get('/user', auth, getUser)
 router.delete('/user/:id', auth, checkAdmin, deleteUser) 
 router.patch('/user/:id', updateUser) 
 
+router.get('/check-auth', auth, checkAuth) 
 router.post('/register', register) 
 router.post('/login', login) 
 
