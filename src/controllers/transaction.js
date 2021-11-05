@@ -157,16 +157,30 @@ exports.getTransactions = async (req, res) => {
 
 exports.getTransaction = async (req, res) => {
     try {
-        const { id } = req.params
-        const transactions = await transaction.findOne({
-            where: {
-                id
-            }
+        const { id } = req.user
+        const data = await transaction.findAll({
+            include: [
+                {
+                    model: trip,
+                    attributes: {
+                        exclude: ["createdAt", "updatedAt"]
+                    }
+                },
+                {
+                    model: user,
+                    attributes: {
+                        exclude: ["createdAt", "updatedAt"]
+                    },
+                    where: {
+                        id
+                    }
+                }
+            ]
         })
 
         res.send({
             status: "success",
-            transactions
+            data
         })
     } catch (error) {
         
