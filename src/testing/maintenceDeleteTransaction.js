@@ -9,7 +9,6 @@ exports.maintenceDeleteTransaction = async (req, res) => {
         let totalImageTrips = '' // initialize container of array string
 
         allTransaction.map(item => {
-            console.log(item.attachment)
             totalImageTrips += item.attachment
         })
 
