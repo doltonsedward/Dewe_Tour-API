@@ -27,28 +27,25 @@ exports.addTransaction = async (req, res) => {
 
 exports.updateTransaction = async (req, res) => {
     try {
-        const { id } = req.params
+        const idParam = req.params.id
+        const { id, role } = req.user
         const { attachment } = req.files
-
-        const authHeader = req.header('Authorization')
-        const token = authHeader && authHeader.split(' ')[1]
-        const tokenDecode = jwt_decode(token) // decoded token
 
         const userInfo = await transaction.findOne({
             where: {
-                id
+                id: idParam
             }
         })
 
-        console.log(userInfo.userId)
+        console.log(userInfo, 'userInfo')
 
-        if (tokenDecode.role === 'admin') {
+        if (role === 'admin') {
             await transaction.update({
                 ...req.body,
-                attachment: attachment[0].filename
+                attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
             }, {
                 where: {
-                    id
+                    id: idParam
                 }
             })
     
@@ -56,7 +53,7 @@ exports.updateTransaction = async (req, res) => {
                 status: "success",
                 message: `Update id: ${id} finished`
             })
-        } else if (userInfo.userId !== tokenDecode.id) {
+        } else if (userInfo.userId !== id) {
             return res.status(400).send({
                 status: "failed",
                 message: "You dont have access for this transaction"
@@ -65,16 +62,67 @@ exports.updateTransaction = async (req, res) => {
 
         await transaction.update({
             ...req.body,
-            attachment: attachment[0].filename
+            attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
         }, {
             where: {
-                id
+                id: idParam
             }
         })
 
         res.send({
             status: "success",
             message: `Update id: ${id} finished`
+        })
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            status: "failed",
+            message: "Server error"
+        })
+    }
+}
+
+exports.updateTransactionById = async (req, res) => {
+    try {
+        const idParam = req.params.id
+        const { role } = req.user
+        const { attachment } = req.files
+
+        // const userInfo = await transaction.findAll({
+        //     where: {
+        //         id: idParam
+        //     }
+        // })
+
+        if (role === 'admin') {
+            await transaction.update({
+                ...req.body,
+                attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
+            }, {
+                where: {
+                    id: idParam
+                }
+            })
+    
+            return res.send({
+                status: "success",
+                message: `Update id: ${idParam} finished`
+            })
+        } 
+
+        await transaction.update({
+            ...req.body,
+            attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
+        }, {
+            where: {
+                id: idParam
+            }
+        })
+
+        res.send({
+            status: "success",
+            message: `Update id: ${idParam} finished`
         })
         
     } catch (error) {
@@ -183,6 +231,6 @@ exports.getTransaction = async (req, res) => {
             data
         })
     } catch (error) {
-        
+        console.log(error)
     }
 }

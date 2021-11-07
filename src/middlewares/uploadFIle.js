@@ -59,7 +59,7 @@ exports.uploadFile = (imageFile, location) => {
                     })
                 }
 
-                return req.status(400).send(err)
+                return res.status(400).send(err)
             }
 
             return next()
