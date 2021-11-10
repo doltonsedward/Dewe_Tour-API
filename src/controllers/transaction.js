@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const jwt_decode = require('jwt-decode')
-const { transaction, trip, user } = require('../../models')
+const { transaction, trip, user, country } = require('../../models')
 
 exports.addTransaction = async (req, res) => {
     try {
@@ -36,8 +35,6 @@ exports.updateTransaction = async (req, res) => {
                 id: idParam
             }
         })
-
-        console.log(userInfo, 'userInfo')
 
         if (role === 'admin') {
             await transaction.update({
@@ -89,11 +86,7 @@ exports.updateTransactionById = async (req, res) => {
         const { role } = req.user
         const { attachment } = req.files
 
-        // const userInfo = await transaction.findAll({
-        //     where: {
-        //         id: idParam
-        //     }
-        // })
+        console.log(attachment[0].filename)
 
         if (role === 'admin') {
             await transaction.update({
@@ -210,6 +203,14 @@ exports.getTransaction = async (req, res) => {
             include: [
                 {
                     model: trip,
+                    include: [
+                        {
+                            model: country,
+                            attributes: {
+                                exclude: ["createdAt", "updatedAt"]
+                            }
+                        }
+                    ],
                     attributes: {
                         exclude: ["createdAt", "updatedAt"]
                     }

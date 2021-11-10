@@ -140,6 +140,7 @@ exports.updateTrip = async (req, res) => {
         const { id } = req.params
         const { image } = req.files
 
+        console.log(req.body, req.files)
         const dataImage = []
 
         image.map(item => {
@@ -147,6 +148,7 @@ exports.updateTrip = async (req, res) => {
         })
 
         await trip.update({
+            ...req.body,
             image:  JSON.stringify(dataImage)
         }, {
             where: {
