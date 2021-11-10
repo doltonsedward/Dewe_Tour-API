@@ -54,6 +54,8 @@ exports.addCountry = async (req, res) => {
             })
         }
 
+        console.log(req.body)
+
         const data = await country.create(req.body)
 
 
@@ -101,6 +103,7 @@ exports.updateCountry = async (req, res) => {
 // delete country
 exports.deleteCountry = async (req, res) => {
     try {
+        console.log('successs')
         const { id } = req.params
 
         const allCountry = await country.findOne({ 

@@ -26,8 +26,8 @@ router.post('/login', login)
 router.get('/countrys', getCountrys) 
 router.get('/country/:id', getCountry) 
 router.post('/country', auth, checkAdmin, addCountry) 
-router.patch('/country/:id', auth, checkAdmin, updateCountry) 
 router.delete('/country/:id', auth, checkAdmin, deleteCountry) 
+router.patch('/country/:id', auth, checkAdmin, updateCountry) 
 
 router.get('/trips', getTrips) 
 router.get('/trip/:id', detailTrip) 
@@ -44,6 +44,6 @@ router.delete('/transaction/:id', auth,  deleteTransaction)
 
 router.delete('/maintence/trips', maintenceDeleteTrips) 
 router.delete('/maintence/transactions', maintenceDeleteTransaction) 
-router.delete('/maintence/avatar', maintenceDeleteAvatar) 
+router.delete('/maintence/profiles', maintenceDeleteAvatar) 
 
 module.exports = router
