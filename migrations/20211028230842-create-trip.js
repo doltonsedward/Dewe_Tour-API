@@ -47,6 +47,9 @@ module.exports = {
       quota: {
         type: Sequelize.INTEGER
       },
+      filled: {
+        type: Sequelize.INTEGER
+      },
       description: {
         type: Sequelize.STRING
       },
@@ -55,11 +58,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: 'TIMESTAMP',
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: 'TIMESTAMP',
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
     });
   },
