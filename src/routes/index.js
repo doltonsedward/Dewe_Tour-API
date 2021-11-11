@@ -32,7 +32,7 @@ router.patch('/country/:id', auth, checkAdmin, updateCountry)
 router.get('/trips', getTrips) 
 router.get('/trip/:id', detailTrip) 
 router.post('/trip', auth, uploadFile("image", 'uploads/trips'), addTrip) 
-router.patch('/trip/:id', uploadFile("image", 'uploads/trips'), updateTrip) 
+router.patch('/trip/:id', auth, updateTrip) 
 router.delete('/trip/:id', auth, checkAdmin, deleteTrip) 
 
 router.get('/transactions', auth, checkAdmin, getTransactions) 

@@ -48,7 +48,7 @@ module.exports = {
         dateTrip: "26 August 2021",
         price: 12398000,
         quota: 12,
-        filled: 0,
+        filled: 12,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
         image: "[\"sydney.jpg\",\"sydney1.jpg\",\"sydney2.jpg\",\"sydney3.jpg\"]"
@@ -64,7 +64,7 @@ module.exports = {
         dateTrip: "11 December 2021",
         price: 10288000,
         quota: 14,
-        filled: 0,
+        filled: 14,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
         image: "[\"south-korea.jpg\",\"south-korea1.jpg\",\"south-korea2.jpg\",\"south-korea3.jpg\"]"
@@ -80,7 +80,7 @@ module.exports = {
         dateTrip: "11 December 2021",
         price: 28999000,
         quota: 10,
-        filled: 0,
+        filled: 10,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
         image: "[\"japan.jpg\",\"japan1.jpg\",\"japan2.jpg\",\"japan3.jpg\"]"
@@ -96,7 +96,7 @@ module.exports = {
         dateTrip: "20 January 2022",
         price: 10488000,
         quota: 8,
-        filled: 0,
+        filled: 8,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
         image: "[\"bogor.jpg\",\"bogor1.jpg\",\"bogor2.jpg\",\"bogor3.jpg\"]"

@@ -61,7 +61,7 @@ exports.detailTrip = async (req, res) => {
             ]
         })
 
-        const { accomodation, countryId, dateTrip, day, description, eat, image, night, price, quota, title, transportation, type } = data
+        const { accomodation, countryId, dateTrip, day, description, eat, image, night, price, quota, filled, title, transportation, type } = data
 
         const dataImage = JSON.parse(image)
         const newDataImage = []
@@ -72,6 +72,7 @@ exports.detailTrip = async (req, res) => {
         res.send({
             status: "success",
             data: { 
+                id,
                 accomodation, 
                 countryId, 
                 dateTrip,  
@@ -82,6 +83,7 @@ exports.detailTrip = async (req, res) => {
                 night,
                 price,
                 quota,
+                filled,
                 title,
                 transportation,
                 type,
@@ -138,19 +140,10 @@ exports.addTrip = async (req, res) => {
 exports.updateTrip = async (req, res) => {
     try {
         const { id } = req.params
-        const { image } = req.files
 
-        console.log(req.body, req.files)
-        const dataImage = []
+        console.log(req.body)
 
-        image.map(item => {
-            dataImage.push(item.filename)
-        })
-
-        await trip.update({
-            ...req.body,
-            image:  JSON.stringify(dataImage)
-        }, {
+        await trip.update({...req.body}, {
             where: {
                 id
             }
@@ -162,6 +155,7 @@ exports.updateTrip = async (req, res) => {
         })
         
     } catch (error) {
+        console.log(error)
         res.status(500).send({
             status: "failed",
             message: "Server error"
