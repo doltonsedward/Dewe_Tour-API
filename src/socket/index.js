@@ -1,5 +1,5 @@
 // import models
-const { chat, user } = require('../../models')
+const { chat, user, transaction } = require('../../models')
 
 const jwt = require('jsonwebtoken')
 
@@ -17,21 +17,37 @@ const socketIo = (io) => {
         const userId = socket.handshake.query.id
         connectedUser[userId] = socket.id
         freshConnectedUser[userId] = userId
+
+        console.log(connectedUser)
         
         socket.on("load user online", () => {
             socket.emit("user online", freshConnectedUser)
         })
 
-        console.log(freshConnectedUser)
+        socket.on("load data trans", async () => {
+            try {
+                const transactions = await transaction.findAll({
+                    include: [
+                        {
+                            model: user,
+                            attributes: {
+                                exclude: ["createdAt", "updatedAt", "password"]
+                            }
+                        }
+                    ],
+                    attributes: {
+                        exclude: ["updatedAt", "attachment"]
+                    },
+                    order: [["createdAt", "desc"]],
+                    limit: 15
+                    , // will show only 10 data
+                })
 
-        // notification 
-        // socket.on("send notification to admin", async ({ senderName, receiverName, type }) => {
-        //     try {
-        //         const 
-        //     } catch (error) {
-                
-        //     }  
-        // })
+                socket.emit("data trans", transactions)
+            } catch (error) {
+                console.log(error)
+            }
+        })
 
         socket.on("load admin contact", async () => {
             try {
@@ -75,7 +91,6 @@ const socketIo = (io) => {
                         exclude: ["createdAt", "updatedAt", "password"]
                     },
                 })
-
                 
                 customerContact = JSON.parse(JSON.stringify(customerContact))
 
@@ -125,6 +140,8 @@ const socketIo = (io) => {
                     }
                 })
 
+                // console.log(data[data.length - 1].message, 'data message')
+
                 socket.emit("messages", data);
             } catch (error) {
                 console.log(error)
@@ -133,6 +150,7 @@ const socketIo = (io) => {
 
         socket.on("send messages", async (payload) => {
             try {
+                console.log('halo')
                 const token = socket.handshake.auth.token
                 const tokenKey = process.env.TOKEN_KEY
                 const verified = jwt.verify(token, tokenKey)
@@ -147,6 +165,11 @@ const socketIo = (io) => {
                 })
 
                 io.to(socket.id).to(connectedUser[idRecipient]).emit("new message", idRecipient)
+
+                console.log(message, 'messages')
+                
+                // notification 
+                io.to(socket.id).to(connectedUser[idRecipient]).emit("generate notification", message)
             } catch (error) {
                 console.log(error)
             }
