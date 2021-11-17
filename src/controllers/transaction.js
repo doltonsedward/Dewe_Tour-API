@@ -6,13 +6,14 @@ exports.addTransaction = async (req, res) => {
     try {
         const { ...data } = req.body
 
-        await transaction.create({
+        const response = await transaction.create({
             ...data
         })
 
         res.send({
             status: "success",
-            message: "Add transaction finished"
+            message: "Add transaction finished",
+            response
         })
 
     } catch (error) {
