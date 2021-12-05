@@ -17,7 +17,7 @@ module.exports = {
         phone: "089619800459",
         address: "Jl. Musyawarah",
         role: "admin",
-        avatar: `http://localhost:8080/uploads/avatar/${avatarDefault[randomAvatar]}`
+        avatar: avatarDefault[randomAvatar]
       }
     ])
 
@@ -51,7 +51,7 @@ module.exports = {
         filled: 12,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-        image: "[\"sydney.jpg\",\"sydney1.jpg\",\"sydney2.jpg\",\"sydney3.jpg\"]"
+        image: "[\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670749/trip-default-dewetour/sydney_p4d1w2.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670749/trip-default-dewetour/sydney1_c0bsra.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670750/trip-default-dewetour/sydney2_xnte3w.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670745/trip-default-dewetour/sydney3_lfj5qu.jpg\"]"
       },
       {
         title: "6D/4N Exciting Summer in Korea",
@@ -67,7 +67,7 @@ module.exports = {
         filled: 14,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-        image: "[\"south-korea.jpg\",\"south-korea1.jpg\",\"south-korea2.jpg\",\"south-korea3.jpg\"]"
+        image: "[\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670747/trip-default-dewetour/south-korea_uuf2qa.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670748/trip-default-dewetour/south-korea1_homzxc.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670749/trip-default-dewetour/south-korea2_ifc1ha.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670750/trip-default-dewetour/south-korea3_eajplz.jpg\"]"
       },
       {
         title: "8D/6N Wonderful Autum From Japan",
@@ -83,7 +83,7 @@ module.exports = {
         filled: 10,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-        image: "[\"japan.jpg\",\"japan1.jpg\",\"japan2.jpg\",\"japan3.jpg\"]"
+        image: "[\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670746/trip-default-dewetour/japan_uxbsam.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670747/trip-default-dewetour/japan1_bhzcmc.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670750/trip-default-dewetour/japan2_lbzjhe.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670748/trip-default-dewetour/japan3_ojjgrv.jpg\"]"
       },
       {
         title: "4D/3N Overland Jakarta Bogor",
@@ -99,7 +99,7 @@ module.exports = {
         filled: 8,
         type: "IDR",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
-        image: "[\"bogor.jpg\",\"bogor1.jpg\",\"bogor2.jpg\",\"bogor3.jpg\"]"
+        image: "[\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670745/trip-default-dewetour/bogor_tyqxyl.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670746/trip-default-dewetour/bogor1_xm9a49.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670746/trip-default-dewetour/bogor2_kdrb3f.jpg\",\"https://res.cloudinary.com/dmegegwqb/image/upload/v1638670746/trip-default-dewetour/bogor3_hg6i6d.jpg\"]"
       }
     ])
   },

@@ -48,3 +48,11 @@ Thumbs.db
 *.mov
 *.wmv
 
+uploads/trips/*jpg
+uploads/trips/*png
+
+uploads/proof/*jpg
+uploads/proof/*png
+
+uploads/avatar-external/*jpg
+uploads/avatar-external/*png
