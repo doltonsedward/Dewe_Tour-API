@@ -24,7 +24,7 @@ exports.getTrips = async (req, res) => {
 
                 const newData = []
                 for (let i = 0; i < itemValue.length; i++) {
-                    newData.push(`${process.env.PATH_TRIPS}${itemValue[i]}`)
+                    newData.push(itemValue[i])
                 }
 
                 dataImage = newData
@@ -66,7 +66,7 @@ exports.detailTrip = async (req, res) => {
         const dataImage = JSON.parse(image)
         const newDataImage = []
         for (let i = 0; i < dataImage.length; i++) {
-            newDataImage.push(`${process.env.PATH_TRIPS}${dataImage[i]}`)
+            newDataImage.push(dataImage[i])
         }
 
         res.send({
