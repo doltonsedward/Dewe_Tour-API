@@ -51,10 +51,10 @@ exports.register = async (req, res) => {
             fullName,
             email,
             password: hashedPassword,
-            phone,
-            address,
+            phone: phone ?? '-',
+            address: address ?? '-',
             role: 'user',
-            avatar: process.env.PATH_AVATAR + avatarDefault[randomAvatar]
+            avatar: avatarDefault[randomAvatar]
         })
 
         res.status(200).send({
