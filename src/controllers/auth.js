@@ -113,11 +113,7 @@ exports.login = async (req, res) => {
         res.status(200).send({
             status: "success",
             data: {
-                id: userExist.id,
                 fullName: userExist.fullName,
-                email: userExist.email,
-                role: userExist.role,
-                avatar: userExist.avatar,
                 token
             }
         })
