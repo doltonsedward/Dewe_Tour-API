@@ -1,4 +1,7 @@
 const { user } = require('../../models')
+const fs = require('fs')
+const cloudinary = require('../thirdparty/cloudinary')
+const checkFolder = require('../utils/checkFolder')
 
 exports.getUsers = async (req, res) => {
     try {
@@ -9,8 +12,7 @@ exports.getUsers = async (req, res) => {
             data
         })
     } catch (error) {
-        console.log(error)
-        res.send({
+        res.status(500).send({
             status: "failed",
             message: "Server Error"
         })
@@ -27,8 +29,6 @@ exports.getUser = async (req, res) => {
                 id
             }
         })
-
-        console.log(idUser)
 
         if (!data) {
             return res.status(404).send({
@@ -56,8 +56,7 @@ exports.getUser = async (req, res) => {
             data
         })
     } catch (error) {
-        console.log(error)
-        res.send({
+        res.status(500).send({
             status: "failed",
             message: "Server Error"
         })
@@ -78,8 +77,7 @@ exports.deleteUser = async (req, res) => {
             message: `Delete user id:${id} finished`
         })
     } catch (error) {
-        console.log(error)
-        res.send({
+        res.status(500).send({
             status: "failed",
             message: "Server error"
         })
@@ -90,25 +88,39 @@ exports.updateUser = async (req, res) => {
     try {
         const { id } = req.user
         const { avatar } = req.files
-        await user.update(
-            {
-                ...req.body,
-                avatar: process.env.PATH_AVATAR_EXTERNAL + avatar[0].filename
-            }, {
-            where: {
-                id
+        
+        const folderToUpload = process.env.CLOUDINARY_AVATAR_FOLDER || "dev_avatar-dewetour"
+        cloudinary.uploader.upload(avatar[0].path, { folder: folderToUpload }, async (error, result) => {
+            if (error) {
+                return res.status(500).send({
+                    status: "failed",
+                    message: "Internal server error"
+                })
             }
+
+            await user.update(
+                {
+                    ...req.body,
+                    avatar: result.secure_url
+                }, {
+                where: {
+                    id
+                }
+            })
+
+            fs.rmdirSync('./uploads/avatar-external', { recursive: true })
+            checkFolder()
+            res.send({
+                status: "success",
+                message: `Update finished`,
+            })
         })
 
-        res.send({
-            status: "success",
-            message: `Update user id:${id} finished`,
-        })
     } catch (error) {
         console.log(error)
-        res.send({
+        res.status(500).send({
             status: "failed",
-            message: "Server error"
+            message: "Internal server error"
         })
     }
 }
@@ -123,7 +135,7 @@ exports.updateUserById = async (req, res) => {
             }
         })
         
-        res.send({
+        res.status(500).send({
             status: 'success',
             message: `Update user id: ${id} finished`
         })
