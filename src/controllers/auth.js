@@ -10,9 +10,7 @@ exports.register = async (req, res) => {
     const schema = Joi.object({
         fullName: Joi.string().min(5).required(),
         email: Joi.string().email().min(6).required(),
-        password: Joi.string().min(6).required(),
-        phone: Joi.string().min(8),
-        address: Joi.string().min(6)
+        password: Joi.string().min(6).required()
     })
 
     const { error } = schema.validate(req.body)
@@ -22,7 +20,6 @@ exports.register = async (req, res) => {
             error: { message: error.details[0].message }
         })
     }
-
     
     try {
         const allUser = await user.findAll()
@@ -47,7 +44,7 @@ exports.register = async (req, res) => {
 
         const randomAvatar = Math.floor(Math.random() * (avatarDefault.length))
 
-        const newUser = await user.create({
+        await user.create({
             fullName,
             email,
             password: hashedPassword,
@@ -59,10 +56,7 @@ exports.register = async (req, res) => {
 
         res.status(200).send({
             status: "success",
-            data: {
-                fullName: newUser.fullName,
-                email: newUser.email
-            }
+            message: "Register finished"
         })
     } catch (error) {
         console.log(error)

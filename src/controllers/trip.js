@@ -1,6 +1,7 @@
-const fs = require('fs')
-const path = require('path')
 const { trip, country } = require('../../models')
+const cloudinaryUploadMultiple = require('../utils/cloudinaryUploadMultiple')
+const rmFolder = require('../utils/rmFolder')
+const checkFolder = require('../utils/checkFolder')
 
 exports.getTrips = async (req, res) => {
     try {
@@ -12,7 +13,10 @@ exports.getTrips = async (req, res) => {
                   exclude: ["createdAt", "updatedAt"],
                 },
               },
-            ]
+            ],
+            attributes: {
+                exclude: ["createdAt", "updatedAt"]
+            }
           });
 
         let dataImage = []
@@ -105,11 +109,16 @@ exports.addTrip = async (req, res) => {
 
         const { image } = req.files
         const allImage = []
-        for (let item of image) {
-            allImage.push(item.filename)
+        const folderName = process.env.CLOUDINARY_TRIP_FOLDER || "dev_trip-dewetour"
+        for (let file of image) {
+            const { path } = file
+            const newPath = await cloudinaryUploadMultiple(path, folderName)
+            allImage.push(newPath)
         }
 
         const imageFileToString = JSON.stringify(allImage)
+        rmFolder('./uploads/trips')
+        checkFolder()
 
         if (isAlreadyExist) {
             return res.status(400).send({
@@ -118,42 +127,15 @@ exports.addTrip = async (req, res) => {
             })
         }
         
-        const data = await trip.create({
+        await trip.create({
             ...req.body,
             image: imageFileToString
         })
 
         res.send({
             status: "success",
-            message: "Add trip finished",
-            data
+            message: "Add trip finished"
         })
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({
-            status: "failed",
-            message: "Server error"
-        })
-    }
-}
-
-exports.updateTrip = async (req, res) => {
-    try {
-        const { id } = req.params
-
-        console.log(req.body)
-
-        await trip.update({...req.body}, {
-            where: {
-                id
-            }
-        })
-
-        res.send({
-            status: "success",
-            message: `Update id: ${id} finished`
-        })
-        
     } catch (error) {
         console.log(error)
         res.status(500).send({
@@ -166,28 +148,12 @@ exports.updateTrip = async (req, res) => {
 exports.deleteTrip = async (req, res) => {
     try {
         const { id } = req.params
-        const data = await trip.findOne({ 
-            where: {
-                id
-            } 
-        })
-
-        const image = data.image
-
-        fs.readdir('./uploads/trips', (err, files) => {
-            files.map((item) => {
-                if (image.indexOf(item) !== -1) {
-                    fs.unlinkSync(path.join(__dirname, '../../uploads/trips/' + item))
-                }
-            })
-        })
 
         await trip.destroy({
             where: {
                 id
             }
         })
-
 
         res.send({
             status: "success",
