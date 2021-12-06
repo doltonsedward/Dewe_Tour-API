@@ -17,7 +17,7 @@ router.get('/users', auth, checkAdmin, getUsers)
 router.get('/user', auth, getUser) 
 router.delete('/user/:id', auth, checkAdmin, deleteUser) 
 router.patch('/user', auth, uploadFile("avatar", 'uploads/avatar-external'), updateUser) 
-router.patch('/user/:id', auth, updateUserById) 
+router.patch('/user/specific', auth, updateUserById) 
 
 router.get('/check-auth', auth, checkAuth) 
 router.post('/register', register) 
