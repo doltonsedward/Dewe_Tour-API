@@ -102,6 +102,31 @@ exports.updateTransaction = async (req, res) => {
     }
 }
 
+exports.updateTransactionInAdmin = async (req, res) => {
+    try {
+        const { id } = req.params
+        console.log(req.body)
+
+        await transaction.update({
+            ...req.body
+        }, {
+            where: {
+                id
+            }
+        })
+
+        res.send({
+            status: "success",
+            message: `Update transaction finished`
+        })
+    } catch (error) {
+        res.status(500).send({
+            status: "failed",
+            message: "Server error"
+        })
+    }
+}
+
 exports.deleteTransaction = async (req, res) => {
     try {
         const { id } = req.params
@@ -153,7 +178,8 @@ exports.getTransactions = async (req, res) => {
             ],
             attributes: {
                 exclude: ["createdAt", "updatedAt"]
-            }
+            },
+            order: [["status", "DESC"]]
         })
         
         res.send({
