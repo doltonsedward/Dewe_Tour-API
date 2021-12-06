@@ -12,13 +12,9 @@ const freshConnectedUser = {}
 
 const socketIo = (io) => {
     io.on("connection", (socket) => {
-        console.log('client connected with id: ', socket.id)
-
         const userId = socket.handshake.query.id
         connectedUser[userId] = socket.id
         freshConnectedUser[userId] = userId
-
-        console.log(connectedUser)
         
         socket.on("load user online", () => {
             socket.emit("user online", freshConnectedUser)
@@ -39,13 +35,12 @@ const socketIo = (io) => {
                         exclude: ["updatedAt", "attachment"]
                     },
                     order: [["createdAt", "desc"]],
-                    limit: 15
-                    , // will show only 10 data
+                    limit: 15 // will show only 15 data
                 })
 
                 socket.emit("data trans", transactions)
             } catch (error) {
-                console.log(error)
+                throw error
             }
         })
 
@@ -63,7 +58,7 @@ const socketIo = (io) => {
                 // emit event to send admin data on event "admin contact"
                 socket.emit("admin contact", adminContact)
             } catch (error) {
-                console.log(error)
+                throw error
             }
         })
 
@@ -96,7 +91,7 @@ const socketIo = (io) => {
 
                 socket.emit("customer contact", customerContact)
             } catch (error) {
-                console.log(error)
+                throw error
             }
         })
 
@@ -140,11 +135,9 @@ const socketIo = (io) => {
                     }
                 })
 
-                // console.log(data[data.length - 1].message, 'data message')
-
-                socket.emit("messages", data);
+                socket.emit("messages", data)
             } catch (error) {
-                console.log(error)
+                throw error
             }
         })
 
@@ -165,18 +158,12 @@ const socketIo = (io) => {
                 })
 
                 io.to(socket.id).to(connectedUser[idRecipient]).emit("new message", idRecipient)
-
-                console.log(message, 'messages')
-                
-                // notification 
-                io.to(socket.id).to(connectedUser[idRecipient]).emit("generate notification", message)
             } catch (error) {
-                console.log(error)
+                throw error
             }
         })
 
         socket.on("disconnect", () => {
-            console.log("client disconnected")
             delete connectedUser[userId]
             delete freshConnectedUser[userId]
         })
