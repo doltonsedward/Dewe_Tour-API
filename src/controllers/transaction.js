@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const { transaction, trip, user, country } = require('../../models')
+const cloudinary = require('../thirdparty/cloudinary')
+const checkFolder = require('../utils/checkFolder')
 
 exports.addTransaction = async (req, res) => {
     try {
@@ -31,96 +33,69 @@ exports.updateTransaction = async (req, res) => {
         const { id, role } = req.user
         const { attachment } = req.files
 
-        const userInfo = await transaction.findOne({
+        const dataTrans = await transaction.findOne({
             where: {
                 id: idParam
             }
         })
 
-        if (role === 'admin') {
+        const folderToUpload = process.env.CLOUDINARY_PROOF_FOLDER || "dev_avatar-dewetour"
+        cloudinary.uploader.upload(attachment[0].path, { folder: folderToUpload }, async (error, result) => {
+            if (error) {
+                console.log('error in update transaction')
+                if (error.code === 'ENOTFOUND') {
+                    return res.status(500).send({
+                        status: "failed",
+                        message: "Cloud not connected"
+                    })
+                }
+
+                return res.status(500).send({
+                    status: "failed",
+                    message: "Upload file error"
+                })
+            }
+
+            if (role === 'admin') {
+                await transaction.update({
+                    ...req.body,
+                    attachment: result.secure_url
+                }, {
+                    where: {
+                        id: idParam
+                    }
+                })
+
+                return res.send({
+                    status: "success",
+                    message: `Update id: ${id} finished`
+                })
+            } else if (dataTrans.userId !== id) {
+                return res.status(403).send({
+                    status: "failed",
+                    message: "You don't have access to this"
+                })
+            }
+    
             await transaction.update({
                 ...req.body,
-                attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
+                attachment: result.secure_url
             }, {
                 where: {
                     id: idParam
                 }
             })
+
+            fs.rmdirSync('./uploads/proof', { recursive: true })
+            checkFolder()
     
-            return res.send({
+            res.send({
                 status: "success",
-                message: `Update id: ${id} finished`
+                message: `Update transaction finished`
             })
-        } else if (userInfo.userId !== id) {
-            return res.status(400).send({
-                status: "failed",
-                message: "You dont have access for this transaction"
-            })
-        } 
 
-        await transaction.update({
-            ...req.body,
-            attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
-        }, {
-            where: {
-                id: idParam
-            }
         })
-
-        res.send({
-            status: "success",
-            message: `Update id: ${id} finished`
-        })
-        
     } catch (error) {
-        console.log(error)
-        res.status(500).send({
-            status: "failed",
-            message: "Server error"
-        })
-    }
-}
-
-exports.updateTransactionById = async (req, res) => {
-    try {
-        const idParam = req.params.id
-        const { role } = req.user
-        const { attachment } = req.files
-
-        console.log(attachment[0].filename)
-
-        if (role === 'admin') {
-            await transaction.update({
-                ...req.body,
-                attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
-            }, {
-                where: {
-                    id: idParam
-                }
-            })
-    
-            return res.send({
-                status: "success",
-                message: `Update id: ${idParam} finished`
-            })
-        } 
-
-        await transaction.update({
-            ...req.body,
-            attachment: process.env.PATH_ATTACHMENT + attachment[0].filename
-        }, {
-            where: {
-                id: idParam
-            }
-        })
-
-        res.send({
-            status: "success",
-            message: `Update id: ${idParam} finished`
-        })
-        
-    } catch (error) {
-        console.log(error)
         res.status(500).send({
             status: "failed",
             message: "Server error"
