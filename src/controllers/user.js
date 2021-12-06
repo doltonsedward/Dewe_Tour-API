@@ -92,9 +92,16 @@ exports.updateUser = async (req, res) => {
         const folderToUpload = process.env.CLOUDINARY_AVATAR_FOLDER || "dev_avatar-dewetour"
         cloudinary.uploader.upload(avatar[0].path, { folder: folderToUpload }, async (error, result) => {
             if (error) {
+                if (error.code === 'ENOTFOUND') {
+                    return res.status(500).send({
+                        status: "failed",
+                        message: "Cloud not connected"
+                    })
+                }
+
                 return res.status(500).send({
                     status: "failed",
-                    message: "Internal server error"
+                    message: "There is not connected to cloud"
                 })
             }
 
@@ -117,7 +124,6 @@ exports.updateUser = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
         res.status(500).send({
             status: "failed",
             message: "Internal server error"
@@ -127,7 +133,8 @@ exports.updateUser = async (req, res) => {
 
 exports.updateUserById = async (req, res) => {
     try {
-        const { id } = req.params
+        const { id } = req.user
+        console.log(req.body)
 
         await user.update({...req.body}, {
             where: {
@@ -135,11 +142,14 @@ exports.updateUserById = async (req, res) => {
             }
         })
         
-        res.status(500).send({
+        res.send({
             status: 'success',
-            message: `Update user id: ${id} finished`
+            message: "Update user finished"
         })
     } catch (error) {
-        console.log(error)
+        res.status(500).send({
+            status: "failed",
+            message: "Internal server error"
+        })
     }
 }
