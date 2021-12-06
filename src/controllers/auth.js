@@ -137,7 +137,7 @@ exports.checkAuth = async (req, res) => {
             attributes: {
                 exclude: ["createdAt", "updatedAt", "password"],
             }
-        })
+        }) 
 
         if (!dataUser) {
             return res.status(404).send({
@@ -155,12 +155,11 @@ exports.checkAuth = async (req, res) => {
                     phone: dataUser.phone,
                     address: dataUser.address,
                     role: dataUser.role,
-                    avatar: dataUser.avatar,
+                    avatar: dataUser.avatar
                 },
             }
         });
     } catch (error) {
-        console.log(error)
         res.status(500).send({
             status: 'failed',
             message: 'Server error'
