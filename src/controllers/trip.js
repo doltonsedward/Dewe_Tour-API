@@ -137,7 +137,31 @@ exports.addTrip = async (req, res) => {
             message: "Add trip finished"
         })
     } catch (error) {
-        console.log(error)
+        res.status(500).send({
+            status: "failed",
+            message: "Server error"
+        })
+    }
+}
+
+exports.updateTrip = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        console.log(req.body)
+
+        await trip.update({...req.body}, {
+            where: {
+                id
+            }
+        })
+
+        res.send({
+            status: "success",
+            message: `Update id: ${id} finished`
+        })
+        
+    } catch (error) {
         res.status(500).send({
             status: "failed",
             message: "Server error"
