@@ -13,7 +13,7 @@ const port = 8080
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000" // we must define cors because our client and server have different origin. and dont use / in back
+        origin: 'https://dewe-tour.vercel.app' || "http://localhost:3000" // we must define cors because our client and server have different origin. and dont use / in back
     }
 })
 
