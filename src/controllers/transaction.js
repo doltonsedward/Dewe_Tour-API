@@ -19,7 +19,6 @@ exports.addTransaction = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error)
         res.status(500).send({
             status: "failed",
             message: "Server error"
@@ -39,7 +38,7 @@ exports.updateTransaction = async (req, res) => {
             }
         })
 
-        const folderToUpload = process.env.CLOUDINARY_PROOF_FOLDER || "dev_avatar-dewetour"
+        const folderToUpload = process.env.CLOUDINARY_PROOF_FOLDER || "dev_proof-dewetour"
         cloudinary.uploader.upload(attachment[0].path, { folder: folderToUpload }, async (error, result) => {
             if (error) {
                 if (error.code === 'ENOTFOUND') {
@@ -105,7 +104,6 @@ exports.updateTransaction = async (req, res) => {
 exports.updateTransactionInAdmin = async (req, res) => {
     try {
         const { id } = req.params
-        console.log(req.body)
 
         await transaction.update({
             ...req.body
