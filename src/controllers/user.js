@@ -1,7 +1,5 @@
 const { user } = require('../../models')
-const fs = require('fs')
 const cloudinary = require('../thirdparty/cloudinary')
-const checkFolder = require('../utils/checkFolder')
 
 exports.getUsers = async (req, res) => {
     try {
@@ -115,8 +113,6 @@ exports.updateUser = async (req, res) => {
                 }
             })
 
-            fs.rmdirSync('./uploads/avatar-external', { recursive: true })
-            checkFolder()
             res.send({
                 status: "success",
                 message: `Update finished`,

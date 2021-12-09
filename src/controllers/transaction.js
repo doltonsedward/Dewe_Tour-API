@@ -1,8 +1,5 @@
-const fs = require('fs')
-const path = require('path')
 const { transaction, trip, user, country } = require('../../models')
 const cloudinary = require('../thirdparty/cloudinary')
-const checkFolder = require('../utils/checkFolder')
 
 exports.addTransaction = async (req, res) => {
     try {
@@ -83,9 +80,6 @@ exports.updateTransaction = async (req, res) => {
                     id: idParam
                 }
             })
-
-            fs.rmdirSync('./uploads/proof', { recursive: true })
-            checkFolder()
     
             res.send({
                 status: "success",
@@ -128,16 +122,6 @@ exports.updateTransactionInAdmin = async (req, res) => {
 exports.deleteTransaction = async (req, res) => {
     try {
         const { id } = req.params
-
-        const data = await transaction.findOne({ 
-            where: {
-                id
-            } 
-        })
-
-        const image = data.attachment
-
-        image ? fs.unlinkSync(path.join(__dirname, '../../uploads/proof/' + image)) : ''
 
         await transaction.destroy({
             where: {

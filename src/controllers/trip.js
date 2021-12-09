@@ -1,7 +1,5 @@
 const { trip, country } = require('../../models')
 const cloudinaryUploadMultiple = require('../utils/cloudinaryUploadMultiple')
-const rmFolder = require('../utils/rmFolder')
-const checkFolder = require('../utils/checkFolder')
 
 exports.getTrips = async (req, res) => {
     try {
@@ -39,8 +37,6 @@ exports.getTrips = async (req, res) => {
             })
         })
     } catch (error) {
-        console.log(error)
-
         res.status(400).send({
             status: "failed",
             message: "Server error"
@@ -117,8 +113,6 @@ exports.addTrip = async (req, res) => {
         }
 
         const imageFileToString = JSON.stringify(allImage)
-        rmFolder('./uploads/trips')
-        checkFolder()
 
         if (isAlreadyExist) {
             return res.status(400).send({
@@ -147,8 +141,6 @@ exports.addTrip = async (req, res) => {
 exports.updateTrip = async (req, res) => {
     try {
         const { id } = req.params
-
-        console.log(req.body)
 
         await trip.update({...req.body}, {
             where: {
