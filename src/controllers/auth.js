@@ -59,7 +59,6 @@ exports.register = async (req, res) => {
             message: "Register finished"
         })
     } catch (error) {
-        console.log(error)
         res.status(500).send({
             status: "failed",
             message: "Server error"
@@ -93,6 +92,13 @@ exports.login = async (req, res) => {
             }
         })
 
+        if (!userExist) {
+            return res.send({
+                status: "failed",
+                message: "User not found"
+            })
+        }
+
         const isPassValid = await bcrypt.compare(req.body.password, userExist.password)
 
         if (!isPassValid) {
@@ -112,7 +118,6 @@ exports.login = async (req, res) => {
             }
         })
     } catch (error) {
-        console.log(error)
         res.status(500).send({
             status: "failed",
             message: "Server error"
