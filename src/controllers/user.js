@@ -134,7 +134,6 @@ exports.updateUser = async (req, res) => {
 exports.updateUserById = async (req, res) => {
     try {
         const { id } = req.user
-        console.log(req.body)
 
         await user.update({...req.body}, {
             where: {

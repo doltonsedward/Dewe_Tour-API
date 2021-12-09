@@ -47,7 +47,7 @@ exports.updateTransaction = async (req, res) => {
                         message: "Cloud not connected"
                     })
                 }
-
+                
                 return res.status(500).send({
                     status: "failed",
                     message: "Upload file error"
