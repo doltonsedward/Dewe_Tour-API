@@ -103,7 +103,7 @@ exports.login = async (req, res) => {
         }
 
         // create jwt token, and add id, role to token. expiresIn for expires date of token
-        const token = jwt.sign({ id: userExist.id, role: userExist.role }, process.env.TOKEN_KEY, { expiresIn: '1d' }) 
+        const token = jwt.sign({ id: userExist.id, role: userExist.role }, process.env.TOKEN_KEY) 
         res.status(200).send({
             status: "success",
             data: {
